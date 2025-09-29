@@ -16,6 +16,10 @@ jobs:
     if: github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name)
     uses: ./.github/workflows/git.yml
 
+  build:
+    needs: git
+    uses: ./.github/workflows/build.yml
+
   release:
-    needs: [git]
+    needs: [git, build]
     uses: ./.github/workflows/release.yml

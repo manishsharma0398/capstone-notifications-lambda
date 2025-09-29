@@ -3,8 +3,15 @@
   "version": "1.0.0",
   "description": "lambda related to notifications for capstone project \"community-conenect\"",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "node .husky/install.mjs",
+    "clean": "rm -rf ./dist",
+    "clean:all": "npm run clean && rm -rf node_modules",
+    "build": "npm run clean && tsc -p . && tsc-alias",
+    "prestart": "npm run build",
+    "start": "node dist/src/index.js",
+    "dev": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -16,5 +23,31 @@
     "url": "https://github.com/manishsharma0398/capstone-notifications-lambda/issues"
   },
   "homepage": "https://github.com/manishsharma0398/capstone-notifications-lambda#readme",
-  "packageManager": "pnpm@10.16.0"
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "packageManager": "pnpm@10.16.0",
+  "engines": {
+    "node": ">=22.17.1"
+  },
+  "dependencies": {
+    "@aws-lambda-powertools/logger": "^2.27.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/aws-lambda": "^8.10.152",
+    "@types/node": "^24.5.2",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
+    "nodemon": "^3.1.10",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
 }

@@ -1,0 +1,63 @@
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // base options
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2022",
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "resolvePackageJsonImports": true,
+    "allowJs": true,
+    "moduleDetection": "force",
+
+    // strictness
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    // if transpiling with ts
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "outDir": "./dist",
+    "sourceMap": true,
+
+    "experimentalDecorators": true,
+
+    // if not transpiling with ts
+    // "moduleResolution": "Bundler",
+    // "module": "esnext",
+    // "noEmit": true,
+
+    "lib": ["es2022"],
+
+    "rootDir": "./",
+    "baseUrl": ".",
+    "paths": {
+      "$/*": ["./*"],
+      "@/*": ["./src/*"]
+    },
+
+    // "typeRoots": ["./src/@types", "./node_modules/@types"],
+    // "types": ["node"],
+
+    // File Layout
+    "forceConsistentCasingInFileNames": true,
+
+    // Stricter Typechecking Options
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"],
+  "tsc-alias": {
+    "resolveFullPaths": true,
+    "verbose": false
+  }
+}
