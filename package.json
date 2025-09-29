@@ -1,0 +1,20 @@
+{
+  "name": "capstone-notifications",
+  "version": "1.0.0",
+  "description": "lambda related to notifications for capstone project \"community-conenect\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manishsharma0398/capstone-notifications-lambda.git"
+  },
+  "author": "Manish Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manishsharma0398/capstone-notifications-lambda/issues"
+  },
+  "homepage": "https://github.com/manishsharma0398/capstone-notifications-lambda#readme",
+  "packageManager": "pnpm@10.16.0"
+}
