@@ -1,4 +1,1 @@
 pnpm exec lint-staged
-cd iac
-terragrunt hcl fmt
-terragrunt validate
