@@ -54,7 +54,7 @@
 
 variable "lambda_region" {
   description = "Default AWS region"
-  default     = "eu-west-2"
+  default     = "ap-south-2"
 }
 
 variable "lambda_name" {
