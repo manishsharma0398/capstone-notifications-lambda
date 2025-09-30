@@ -2,5 +2,7 @@ node_modules
 
 .env
 
-iac/**/**/provider.tf
-iac/**/**/backend.tf
+**/**/provider.tf
+**/**/backend.tf
+**/**/.terraform.lock.hcl
+**/**/.terraform

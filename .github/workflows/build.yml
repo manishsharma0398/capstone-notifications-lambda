@@ -23,3 +23,12 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prod
+
+      - name: Build & Package Lambda
+        run: pnpm run package
+
+      - name: Upload Lambda Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lambda-package
+          path: dist/function.zip

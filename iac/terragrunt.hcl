@@ -4,6 +4,7 @@ locals {
   project = "Capstone"
   owner   = "Manish"
   region  = "ap-south-2"
+  lambda-name = "capstone-notifications"
 
   common_tags = {
     Project = "Capstone"
@@ -11,16 +12,6 @@ locals {
     Managed = "Terraform"
   }
 }
-
-# remote_state {
-#   backend = "s3"
-#   config = {
-#     bucket  = "capstone-community-connect-tf-state"
-#     key     = "lambda/notifications/${path_relative_to_include()}/terraform.tfstate"
-#     region  = "${local.region}"
-#     encrypt = true
-#   }
-# }
 
 # Generate a backend config for every child
 generate "backend" {
@@ -30,7 +21,7 @@ generate "backend" {
 terraform {
   backend "s3" {
     bucket  = "capstone-community-connect-tf-state"
-    key     = "lambda/notifications/${path_relative_to_include()}.tfstate"
+    key     = "lambda/${local.lambda-name}/${path_relative_to_include()}.tfstate"
     region  = "${local.region}"
     encrypt = true
   }
@@ -60,7 +51,7 @@ EOF
 }
 
 inputs = {
-  lambda_name             = "capstone-notifications"
+  lambda_name             = "${local.lambda-name}"
   lambda_function_handler = "dist/src/index.handler"
   lambda_function_runtime = "nodejs22.x"
   lambda_source_code_path = "../lambda.zip"
