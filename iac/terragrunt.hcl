@@ -1,9 +1,9 @@
 # iac/terragrunt.hcl
 
 locals {
-  project = "Capstone"
-  owner   = "Manish"
-  region  = "ap-south-2"
+  project     = "Capstone"
+  owner       = "Manish"
+  region      = "ap-south-2"
   lambda-name = "capstone-notifications"
 
   common_tags = {
