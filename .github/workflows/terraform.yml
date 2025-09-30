@@ -20,6 +20,7 @@ on:
         description: Environment to deploy to
         options:
           - stg
+          - prd
 
 env:
   TF_INPUT: "0"
