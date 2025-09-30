@@ -17,9 +17,24 @@ jobs:
     uses: ./.github/workflows/git.yml
 
   build:
-    needs: git
+    needs: [git]
     uses: ./.github/workflows/build.yml
 
+  terraform:
+    needs: [build]
+    name: Terraform
+    strategy:
+      matrix:
+        environment: [stg]
+      fail-fast: false
+    uses: ./.github/workflows/terraform.yml
+    with:
+      environment: ${{ matrix.environment }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
   release:
-    needs: [git, build]
+    needs: [git]
+    if: ${{ github.ref == 'refs/heads/master' }}
     uses: ./.github/workflows/release.yml
