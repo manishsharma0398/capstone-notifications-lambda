@@ -1,3 +1,6 @@
 node_modules
 
 .env
+
+iac/**/**/provider.tf
+iac/**/**/backend.tf

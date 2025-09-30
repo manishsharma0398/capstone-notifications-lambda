@@ -1,15 +1,5 @@
 # iac/resources/main.tf
 
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-  required_version = "~> 1.3.3"
-}
-
 locals {
   full_lambda_name = "${var.lambda_ci_environment_slug}-${var.lambda_name}-${var.lambda_region}"
   # layers           = []
