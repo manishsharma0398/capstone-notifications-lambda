@@ -22,10 +22,16 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prod
+        run: pnpm install --frozen-lockfile
 
-      - name: Build & Package Lambda
-        run: pnpm run package
+      - name: Build Lambda
+        run: pnpm run build
+
+      - name: Prune dev dependencies
+        run: pnpm prune --prod
+
+      - name: Package
+        run: zip -r dist/function.zip dist node_modules package.json
 
       - name: Upload Lambda Artifact
         uses: actions/upload-artifact@v4
