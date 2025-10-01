@@ -15,8 +15,13 @@ export class SecretService {
   constructor();
   constructor(capstoneEmail: string, capstoneEmailPass: string);
   constructor(capstoneEmail?: string, capstoneEmailPass?: string) {
-    this.capstoneEmail = capstoneEmail || "";
-    this.capstoneEmailPass = capstoneEmailPass || "";
+    if (capstoneEmail && capstoneEmailPass) {
+      this.capstoneEmail = capstoneEmail;
+      this.capstoneEmailPass = capstoneEmailPass;
+    } else {
+      this.capstoneEmail = "";
+      this.capstoneEmailPass = "";
+    }
   }
 
   static getInstance(forceReset = false): SecretService {

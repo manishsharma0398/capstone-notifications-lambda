@@ -36,6 +36,8 @@ export async function sendEmail({ subject, text, to, html }: sendEmailTypes) {
       SecretService.getInstance().getCapstoneEmail(),
     ]);
 
+    logger.debug("will send email now");
+
     const info = await transport.sendMail({
       from: `Community Connect <${user}>`,
       to,
