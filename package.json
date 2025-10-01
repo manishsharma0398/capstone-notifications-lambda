@@ -34,13 +34,17 @@
     "node": ">=22.17.1"
   },
   "dependencies": {
-    "@aws-lambda-powertools/logger": "^2.27.0"
+    "@aws-lambda-powertools/logger": "^2.27.0",
+    "@aws-sdk/client-secrets-manager": "3.899.0",
+    "dotenv": "17.2.3",
+    "nodemailer": "7.0.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/aws-lambda": "^8.10.152",
     "@types/node": "^24.5.2",
+    "@types/nodemailer": "7.0.2",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.1.7",
