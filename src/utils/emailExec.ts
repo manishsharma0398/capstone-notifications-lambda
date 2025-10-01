@@ -5,7 +5,11 @@ import { sendEmail } from "@/services";
 import { type Message, logger } from "@/utils";
 
 export const emailExec = async (record: Message) => {
+  logger.info("emailExec", { record });
+
   const { data, type } = record;
+
+  logger.info("emailExec2", { record });
 
   switch (type) {
     case "USER_REGISTERED_FROM_EMAIL":

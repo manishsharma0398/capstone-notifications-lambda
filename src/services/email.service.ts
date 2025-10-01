@@ -21,6 +21,9 @@ async function getTransporter() {
     const user = await secretService.getCapstoneEmail();
     const pass = await secretService.getCapstoneEmailPass();
 
+    logger.debug("getTransporter");
+    logger.debug("secret values", { user, pass });
+
     transporter = nodemailer.createTransport({
       service: "gmail",
       auth: { user, pass },
@@ -31,6 +34,7 @@ async function getTransporter() {
 
 export async function sendEmail({ subject, text, to, html }: sendEmailTypes) {
   try {
+    logger.debug("entered sendEmail function");
     const [transport, user] = await Promise.all([
       getTransporter(),
       SecretService.getInstance().getCapstoneEmail(),

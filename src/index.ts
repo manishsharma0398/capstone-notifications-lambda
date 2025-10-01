@@ -28,7 +28,7 @@ async function processMessageAsync(record: SNSEventRecord): Promise<void> {
     const rawMessage = record.Sns?.Message;
 
     logger.info("Processing SNS message", {
-      message: rawMessage,
+      rawMessage,
       subject: record.Sns?.Subject,
       messageId: record.Sns?.MessageId,
     });
@@ -36,13 +36,17 @@ async function processMessageAsync(record: SNSEventRecord): Promise<void> {
     let message: Message;
 
     try {
+      logger.info("parsing message");
       message = JSON.parse(rawMessage) as Message;
+      logger.info("message parsed", { message });
     } catch (error) {
       logger.error("Invalid SNS message JSON", { rawMessage, error });
       return;
     }
 
+    logger.info("before emailExec");
     await emailExec(message);
+    logger.info("after emailExec");
   } catch (err) {
     console.error("❌ Error processing message:", err);
     throw err;
