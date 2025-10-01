@@ -38,8 +38,8 @@
       "@/*": ["./src/*"]
     },
 
-    // "typeRoots": ["./src/@types", "./node_modules/@types"],
-    // "types": ["node"],
+    "typeRoots": ["./src/@types", "./node_modules/@types"],
+    "types": ["node"],
 
     // File Layout
     "forceConsistentCasingInFileNames": true,

@@ -9,6 +9,7 @@
     "clean": "rm -rf ./dist",
     "clean:all": "npm run clean && rm -rf node_modules",
     "build": "npm run clean && tsc -p . && tsc-alias",
+    "package": "pnpm run build && zip -r dist/function.zip dist node_modules package.json",
     "prestart": "npm run build",
     "start": "node dist/src/index.js",
     "dev": "nodemon"

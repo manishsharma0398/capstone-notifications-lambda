@@ -1,0 +1,99 @@
+name: Terraform (Terragrunt)
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: Environment to deploy to
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: choice
+        description: Environment to deploy to
+        options:
+          - stg
+          - prd
+
+env:
+  TF_INPUT: "0"
+  AWS_REGION: "ap-south-2"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.environment != 'prd' || github.ref == 'refs/heads/master' }}
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.3
+
+      - name: Check terragrunt HCL
+        uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_version: "0.88.0"
+          tf_path: "terraform"
+          tg_dir: "./iac"
+          tg_command: "hcl fmt --check --diff"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.3.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download Lambda Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lambda-package
+          path: dist
+
+      - name: Terragrunt Plan (${{ inputs.environment }})
+        working-directory: ./iac/${{ inputs.environment }}
+        run: terragrunt plan --all --non-interactive
+
+  apply:
+    runs-on: ubuntu-latest
+    if: ${{ inputs.environment != 'prd' || github.ref == 'refs/heads/master' }}
+    needs: plan
+    environment: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.3
+
+      - name: Check terragrunt HCL
+        uses: gruntwork-io/terragrunt-action@v3
+        with:
+          tg_version: "0.88.0"
+          tf_path: "terraform"
+          tg_dir: "./iac"
+          tg_command: "hcl fmt --check --diff"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.3.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Download Lambda Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: lambda-package
+          path: dist
+
+      - name: Terragrunt Apply (${{ inputs.environment }})
+        working-directory: ./iac/${{ inputs.environment }}
+        run: terragrunt apply --all --non-interactive --auto-approve
