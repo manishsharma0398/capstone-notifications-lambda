@@ -13,23 +13,20 @@ export interface sendEmailTypes {
   subject: string;
 }
 
-let transporter: nodemailer.Transporter | null = null;
-
 async function getTransporter() {
-  if (!transporter) {
-    logger.debug("getTransporter: initializing transporter");
+  logger.debug("getTransporter: initializing transporter");
 
-    const secretService = SecretService.getInstance();
-    const user = await secretService.getCapstoneEmail();
-    const pass = await secretService.getCapstoneEmailPass();
+  const secretService = SecretService.getInstance();
+  const user = await secretService.getCapstoneEmail();
+  logger.debug("getTransporter: email fetched", { user });
 
-    logger.debug("getTransporter: secrets fetched", { user, pass });
+  const pass = await secretService.getCapstoneEmailPass();
+  logger.debug("getTransporter: pass fetched", { pass });
 
-    transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: { user, pass },
-    });
-  }
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: { user, pass },
+  });
 
   return transporter;
 }

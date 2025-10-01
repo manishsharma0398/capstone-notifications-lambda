@@ -54,7 +54,9 @@ export class SecretService {
     logger.debug(`[SecretService] getSecretKey(secretId: ${secretId})`);
     try {
       const command = new GetSecretValueCommand({ SecretId: secretId });
+      logger.debug("command", { command });
       const res = await this.client.send(command);
+      logger.debug("res", { res });
       if (res.SecretString) return res.SecretString;
       throw new Error(`[SecretService] SecretString ${secretId} not found`);
     } catch (err) {
