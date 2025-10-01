@@ -2,7 +2,9 @@ import nodemailer from "nodemailer";
 
 // utils
 import { logger } from "@/utils";
-import { SecretService } from "./secrets-manager.service";
+
+// services
+import { SecretService } from "@/services";
 
 export interface sendEmailTypes {
   to: string;

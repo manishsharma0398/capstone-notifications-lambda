@@ -2,7 +2,9 @@ import type { SNSEvent, SNSHandler, SNSEventRecord } from "aws-lambda";
 
 // utils
 import { emailExec, logger, type Message } from "@/utils";
-import { SecretService } from "./services";
+
+// services
+import { SecretService } from "@/services";
 
 (async () => {
   try {

@@ -2,7 +2,9 @@ import {
   GetSecretValueCommand,
   SecretsManagerClient,
 } from "@aws-sdk/client-secrets-manager";
-import { Env, logger } from "../utils";
+
+// utils
+import { Env, logger } from "@/utils";
 
 export class SecretService {
   private static instance: SecretService;

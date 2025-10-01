@@ -1,6 +1,8 @@
-import { logger } from "./logger";
-import { sendEmail } from "../services";
-import type { Message } from "./types";
+// services
+import { sendEmail } from "@/services";
+
+// utils
+import { type Message, logger } from "@/utils";
 
 export const emailExec = async (record: Message) => {
   const { data, type } = record;
