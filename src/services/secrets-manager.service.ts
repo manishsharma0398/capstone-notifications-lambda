@@ -9,7 +9,7 @@ import { Env, logger } from "@/utils";
 export class SecretService {
   private static instance: SecretService;
 
-  private client = new SecretsManagerClient({}); // reused
+  private client = new SecretsManagerClient({ region: "ap-south-2" }); // reused
 
   private capstoneEmail: string = "";
   private capstoneEmailPass: string = "";
@@ -37,7 +37,7 @@ export class SecretService {
     if (!this.capstoneEmailPass) {
       logger.debug("[SecretService] Fetching capstone email password");
       this.capstoneEmailPass = await this.getSecretKey(
-        Env.CAPSTONE_EMAIL_PASS_KEY!,
+        Env.CAPSTONE_EMAIL_PASS_KEY!
       );
       logger.debug("[SecretService] capstoneEmailPass cached");
     }
