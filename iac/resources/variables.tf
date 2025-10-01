@@ -3,17 +3,8 @@
 #   description = "AWS account"
 # }
 
-# variable "lambda_vpc_id" {
-#   description = "AWS VPC were to deploy the lambda function"
-#   default     = null
-# }
-
 # variable "lambda_project_name" {
 #   description = "Principal project for lambda function"
-# }
-
-# variable "lamdba_description" {
-#   description = "Lambda function description"
 # }
 
 # variable "lambda_s3_bucket" {
@@ -52,6 +43,11 @@
 
 ####
 
+variable "lambda_vpc_id" {
+  description = "AWS VPC were to deploy the lambda function"
+  default     = null
+}
+
 variable "lambda_region" {
   description = "Default AWS region"
   default     = "ap-south-2"
@@ -59,6 +55,10 @@ variable "lambda_region" {
 
 variable "lambda_name" {
   description = "Lambda function name"
+}
+
+variable "lamdba_description" {
+  description = "Lambda function description"
 }
 
 variable "lambda_function_handler" {
