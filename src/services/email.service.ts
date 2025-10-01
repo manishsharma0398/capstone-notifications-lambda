@@ -13,18 +13,31 @@ export interface sendEmailTypes {
   subject: string;
 }
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: await SecretService.getInstance().getCapstoneEmail(),
-    pass: await SecretService.getInstance().getCapstoneEmailPass(),
-  },
-});
+let transporter: nodemailer.Transporter | null = null;
+
+async function getTransporter() {
+  if (!transporter) {
+    const secretService = SecretService.getInstance();
+    const user = await secretService.getCapstoneEmail();
+    const pass = await secretService.getCapstoneEmailPass();
+
+    transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user, pass },
+    });
+  }
+  return transporter;
+}
 
 export async function sendEmail({ subject, text, to, html }: sendEmailTypes) {
   try {
-    const info = await transporter.sendMail({
-      from: `Community Connect <${await SecretService.getInstance().getCapstoneEmail()}>`,
+    const [transport, user] = await Promise.all([
+      getTransporter(),
+      SecretService.getInstance().getCapstoneEmail(),
+    ]);
+
+    const info = await transport.sendMail({
+      from: `Community Connect <${user}>`,
       to,
       subject,
       text,
