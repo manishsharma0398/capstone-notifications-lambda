@@ -37,7 +37,7 @@ resource "aws_lambda_function" "main" {
   # layers                         = local.layers
 
   vpc_config {
-    subnet_ids         = data.aws_subnets.private.ids
+    subnet_ids         = data.aws_subnets.main.ids
     security_group_ids = [aws_security_group.main.id]
   }
 
