@@ -9,7 +9,9 @@ import { SecretService } from "@/services";
 (async () => {
   try {
     logger.debug("fetching secrets during lambda warmup");
-    await Promise.all([SecretService.getInstance()]);
+    const svc = SecretService.getInstance();
+    await Promise.all([svc.getCapstoneEmail(), svc.getCapstoneEmailPass()]);
+    logger.debug("warmup: secrets fetched");
   } catch (error) {
     logger.error("Error fetching secrets during lambda warmup", { error });
   }

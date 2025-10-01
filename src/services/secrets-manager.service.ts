@@ -9,20 +9,12 @@ import { Env, logger } from "@/utils";
 export class SecretService {
   private static instance: SecretService;
 
-  private capstoneEmail: string;
-  private capstoneEmailPass: string;
+  private client = new SecretsManagerClient({}); // reused
 
-  constructor();
-  constructor(capstoneEmail: string, capstoneEmailPass: string);
-  constructor(capstoneEmail?: string, capstoneEmailPass?: string) {
-    if (capstoneEmail && capstoneEmailPass) {
-      this.capstoneEmail = capstoneEmail;
-      this.capstoneEmailPass = capstoneEmailPass;
-    } else {
-      this.capstoneEmail = "";
-      this.capstoneEmailPass = "";
-    }
-  }
+  private capstoneEmail: string = "";
+  private capstoneEmailPass: string = "";
+
+  constructor() {}
 
   static getInstance(forceReset = false): SecretService {
     if (!SecretService.instance || forceReset) {
@@ -36,6 +28,7 @@ export class SecretService {
     if (!this.capstoneEmail) {
       logger.debug("[SecretService] Fetching capstone email");
       this.capstoneEmail = await this.getSecretKey(Env.CAPSTONE_EMAIL_KEY!);
+      logger.debug("[SecretService] capstoneEmail cached");
     }
     return this.capstoneEmail;
   }
@@ -46,20 +39,27 @@ export class SecretService {
       this.capstoneEmailPass = await this.getSecretKey(
         Env.CAPSTONE_EMAIL_PASS_KEY!,
       );
+      logger.debug("[SecretService] capstoneEmailPass cached");
     }
     return this.capstoneEmailPass;
   }
 
   async getSecretKey(secretId: string) {
-    logger.debug(`[SecretService] getSecretKey(secretId: ${secretId})`);
-    const secretsManagerClient = new SecretsManagerClient({});
-    const command = new GetSecretValueCommand({ SecretId: secretId });
-
-    const result = (await secretsManagerClient.send(command)).SecretString;
-    if (result) {
-      return result;
+    if (!secretId) {
+      const msg = `[SecretService] secretId is empty/undefined`;
+      logger.error(msg);
+      throw new Error(msg);
     }
 
-    throw new Error(`[SecretService] SecretString ${secretId} not found`);
+    logger.debug(`[SecretService] getSecretKey(secretId: ${secretId})`);
+    try {
+      const command = new GetSecretValueCommand({ SecretId: secretId });
+      const res = await this.client.send(command);
+      if (res.SecretString) return res.SecretString;
+      throw new Error(`[SecretService] SecretString ${secretId} not found`);
+    } catch (err) {
+      logger.error("[SecretService] error fetching secret", { secretId, err });
+      throw err;
+    }
   }
 }
