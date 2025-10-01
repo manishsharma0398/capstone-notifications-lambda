@@ -15,9 +15,7 @@ import { SecretService } from "@/services";
   }
 })();
 
-export const functionHandler: SNSHandler = async (
-  event: SNSEvent,
-): Promise<void> => {
+export const handler: SNSHandler = async (event: SNSEvent): Promise<void> => {
   logger.info(`Received ${event.Records.length} SNS messages`);
 
   await Promise.all(event.Records.map((record) => processMessageAsync(record)));
