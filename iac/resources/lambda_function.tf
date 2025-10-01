@@ -36,12 +36,9 @@ resource "aws_lambda_function" "main" {
   # reserved_concurrent_executions = var.lambda_reserved_concurrent_executions
   # layers                         = local.layers
 
-  dynamic "vpc_config" {
-    for_each = try(data.aws_subnets.main[0].ids, null) != null && try(aws_security_group.main[0].id, null) != null ? [true] : []
-    content {
-      security_group_ids = [aws_security_group.main[0].id]
-      subnet_ids         = data.aws_subnets.main[0].ids
-    }
+  vpc_config {
+    subnet_ids         = data.aws_subnets.private.ids
+    security_group_ids = [aws_security_group.main.id]
   }
 
   # dynamic "tracing_config" {
@@ -63,16 +60,19 @@ resource "aws_lambda_function" "main" {
   ]
 }
 
+
+# -------------------------------
+# VPC and Subnet lookups
+# -------------------------------
+
 data "aws_vpc" "main" {
-  count = var.lambda_vpc_id != null ? 1 : 0
-  id    = var.lambda_vpc_id
+  id = var.lambda_vpc_id
 }
 
 data "aws_subnets" "main" {
-  count = var.lambda_vpc_id != null ? 1 : 0
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.main[0].id]
+    values = [data.aws_vpc.main.id]
   }
 
   tags = {
@@ -80,22 +80,14 @@ data "aws_subnets" "main" {
   }
 }
 
-resource "aws_cloudwatch_log_group" "main" {
-  name              = "/aws/lambda/${local.full_lambda_name}"
-  retention_in_days = var.lambda_log_group_retention_in_days
-
-  # kms_key_id = var.lambda_log_group_kms_key_id
-
-  tags = merge(var.tags, {
-    Name = "${local.full_lambda_name}-logs"
-  })
-}
+# -------------------------------
+# Security group for Lambda
+# -------------------------------
 
 resource "aws_security_group" "main" {
-  count       = var.lambda_vpc_id != null ? 1 : 0
   name        = "${local.full_lambda_name}-sg"
   description = "Security Group for lamdba function ${local.full_lambda_name}"
-  vpc_id      = var.lambda_vpc_id
+  vpc_id      = data.aws_vpc.main.id
 
   egress {
     description = "Egress Traffic"
@@ -110,4 +102,20 @@ resource "aws_security_group" "main" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+
+# -------------------------------
+# Cloudwatch log group for Lambda
+# -------------------------------
+
+resource "aws_cloudwatch_log_group" "main" {
+  name              = "/aws/lambda/${local.full_lambda_name}"
+  retention_in_days = var.lambda_log_group_retention_in_days
+
+  # kms_key_id = var.lambda_log_group_kms_key_id
+
+  tags = merge(var.tags, {
+    Name = "${local.full_lambda_name}-logs"
+  })
 }
