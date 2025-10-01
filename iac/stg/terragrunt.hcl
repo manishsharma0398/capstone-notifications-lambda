@@ -19,8 +19,8 @@ inputs = {
   lambda_timeout             = 3
   lambda_environment_variables = {
     LOG_LEVEL               = "DEBUG"
-    CAPSTONE_EMAIL_KEY      = "CAPSTONE_STG_EMAIL"
-    CAPSTONE_EMAIL_PASS_KEY = "CAPSTONE_STG_EMAIL_PASS"
+    CAPSTONE_EMAIL_KEY      = "STG_CAPSTONE_EMAIL"
+    CAPSTONE_EMAIL_PASS_KEY = "STG_CAPSTONE_EMAIL_PASS"
   }
   lambda_vpc_id = "vpc-0653c2a227121428d"
   # lambda_tracing_mode                = ""

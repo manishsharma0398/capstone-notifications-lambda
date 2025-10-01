@@ -12,15 +12,6 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-  workflow_dispatch:
-    inputs:
-      environment:
-        required: true
-        type: choice
-        description: Environment to deploy to
-        options:
-          - stg
-          - prd
 
 env:
   TF_INPUT: "0"
