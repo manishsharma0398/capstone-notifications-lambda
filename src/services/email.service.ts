@@ -17,28 +17,29 @@ let transporter: nodemailer.Transporter | null = null;
 
 async function getTransporter() {
   if (!transporter) {
+    logger.debug("getTransporter: initializing transporter");
+
     const secretService = SecretService.getInstance();
     const user = await secretService.getCapstoneEmail();
     const pass = await secretService.getCapstoneEmailPass();
 
-    logger.debug("getTransporter");
-    logger.debug("secret values", { user, pass });
+    logger.debug("getTransporter: secrets fetched", { user, pass });
 
     transporter = nodemailer.createTransport({
       service: "gmail",
       auth: { user, pass },
     });
   }
+
   return transporter;
 }
 
 export async function sendEmail({ subject, text, to, html }: sendEmailTypes) {
   try {
     logger.debug("entered sendEmail function");
-    const [transport, user] = await Promise.all([
-      getTransporter(),
-      SecretService.getInstance().getCapstoneEmail(),
-    ]);
+
+    const transport = await getTransporter(); // only one call
+    const user = await SecretService.getInstance().getCapstoneEmail();
 
     logger.debug("will send email now");
 
