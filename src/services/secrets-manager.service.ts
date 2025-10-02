@@ -37,7 +37,7 @@ export class SecretService {
     if (!this.capstoneEmailPass) {
       logger.debug("[SecretService] Fetching capstone email password");
       this.capstoneEmailPass = await this.getSecretKey(
-        Env.CAPSTONE_EMAIL_PASS_KEY!
+        Env.CAPSTONE_EMAIL_PASS_KEY!,
       );
       logger.debug("[SecretService] capstoneEmailPass cached");
     }
@@ -54,13 +54,31 @@ export class SecretService {
     logger.debug(`[SecretService] getSecretKey(secretId: ${secretId})`);
     try {
       const command = new GetSecretValueCommand({ SecretId: secretId });
-      logger.debug("command", { command });
+      logger.debug(`[SecretService] Command created for: ${secretId}`);
+
       const res = await this.client.send(command);
-      logger.debug("res", { res });
+
+      // Safe logging - only log what we need
+      logger.debug(
+        `[SecretService] Secret retrieved successfully for: ${secretId}`,
+        {
+          name: res.Name,
+          arn: res.ARN,
+          createdDate: res.CreatedDate,
+          hasSecretString: !!res.SecretString,
+          secretStringLength: res.SecretString?.length,
+        },
+      );
+
       if (res.SecretString) return res.SecretString;
+
       throw new Error(`[SecretService] SecretString ${secretId} not found`);
     } catch (err) {
-      logger.error("[SecretService] error fetching secret", { secretId, err });
+      logger.error("[SecretService] Error fetching secret", {
+        secretId,
+        errorMessage: err instanceof Error ? err.message : String(err),
+        errorName: err instanceof Error ? err.name : "Unknown",
+      });
       throw err;
     }
   }
