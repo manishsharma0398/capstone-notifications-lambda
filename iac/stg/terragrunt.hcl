@@ -19,8 +19,8 @@ inputs = {
   lambda_timeout             = 7
   lambda_environment_variables = {
     LOG_LEVEL               = "DEBUG"
-    CAPSTONE_EMAIL_KEY      = "STG_CAPSTONE_EMAIL"
-    CAPSTONE_EMAIL_PASS_KEY = "STG_CAPSTONE_EMAIL_PASS"
+    CAPSTONE_EMAIL_KEY      = "STG_EMAIL_CAPSTONE"
+    CAPSTONE_EMAIL_PASS_KEY = "STG_EMAIL_PASS_CAPSTONE"
   }
   # lambda_tracing_mode                = ""
   lambda_log_group_retention_in_days = 3
