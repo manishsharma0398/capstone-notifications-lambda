@@ -13,28 +13,29 @@ resource "aws_security_group" "main" {
   description = "Security Group for lamdba function ${local.full_lambda_name}"
   vpc_id      = data.terraform_remote_state.vpcs.outputs.vpc_id
 
-  # Allow outbound HTTPS to VPC endpoint
-  egress {
-    description = "HTTPS to VPC endpoints"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [data.terraform_remote_state.vpcs.outputs.vpc_cidr_block]
-  }
-
-  egress {
-    description = "Egress Traffic"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   tags = merge(var.common_tags, { Name = "${local.full_lambda_name}-sg", Environment : var.lambda_ci_environment_slug })
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_security_group_rule" "lambda_egress_to_vpce" {
+  type                     = "egress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.main.id # Lambda SG
+  source_security_group_id = data.terraform_remote_state.vpcs.outputs.secrets_manager_vpc_endpoint_sg_id
+}
+
+resource "aws_security_group_rule" "lambda_ingress_from_vpce" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.main.id # Lambda SG
+  source_security_group_id = data.terraform_remote_state.vpcs.outputs.secrets_manager_vpc_endpoint_sg_id
 }
 
 # -------------------------------
