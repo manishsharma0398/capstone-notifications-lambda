@@ -5,7 +5,7 @@ import {
 } from "@aws-sdk/client-secrets-manager";
 
 // utils
-import { Env, logger } from "@/utils";
+import { logger } from "@/utils";
 
 export class SecretService {
   private static instance: SecretService;
