@@ -1,5 +1,6 @@
 import {
   GetSecretValueCommand,
+  ListSecretsCommand,
   SecretsManagerClient,
 } from "@aws-sdk/client-secrets-manager";
 
@@ -83,3 +84,18 @@ export class SecretService {
     }
   }
 }
+
+// Test AWS connectivity
+export const testSecrets = async () => {
+  try {
+    const client = new SecretsManagerClient({ region: "ap-south-2" });
+    const command = new ListSecretsCommand({});
+    const result = await client.send(command);
+    console.log(
+      "Available secrets:",
+      result.SecretList?.map((s) => s.Name),
+    );
+  } catch (error) {
+    console.error("Secrets Manager test failed:", error);
+  }
+};

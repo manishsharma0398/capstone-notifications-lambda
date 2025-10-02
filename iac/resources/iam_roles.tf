@@ -1,3 +1,5 @@
+# iac\resources\iam_roles.tf
+
 resource "aws_iam_role" "lambda_exec" {
   name = local.full_lambda_name
 
@@ -31,13 +33,13 @@ resource "aws_iam_policy" "secrets_policy" {
         Sid    = "AllowSecretsAccess"
         Effect = "Allow"
         Action = [
-          "secretsmanager:ListSecrets",
           "secretsmanager:GetSecretValue",
-          "secretsmanager:DescribeSecret"
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:ListSecrets"
         ]
         Resource = [
-          aws_secretsmanager_secret.capstone_email_key.arn,
-          aws_secretsmanager_secret.capstone_email_key_pass.arn,
+          data.aws_secretsmanager_secret.capstone_email_key.arn,
+          data.aws_secretsmanager_secret.capstone_email_pass_key.arn,
         ]
       },
     ]

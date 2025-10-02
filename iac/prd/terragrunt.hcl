@@ -22,7 +22,6 @@ inputs = {
     CAPSTONE_EMAIL_KEY      = "PRD_CAPSTONE_EMAIL"
     CAPSTONE_EMAIL_PASS_KEY = "PRD_CAPSTONE_EMAIL_PASS"
   }
-  lambda_vpc_id = "vpc-0838bac41ccae0716"
   # lambda_tracing_mode                = ""
   lambda_log_group_retention_in_days = 7
   # enable_dynatrace_layer             = ""

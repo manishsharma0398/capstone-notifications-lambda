@@ -4,7 +4,7 @@ import type { SNSEvent, SNSHandler, SNSEventRecord } from "aws-lambda";
 import { emailExec, logger, type Message } from "@/utils";
 
 // services
-import { SecretService } from "@/services";
+import { SecretService, testSecrets } from "@/services";
 
 (async () => {
   try {
@@ -19,6 +19,8 @@ import { SecretService } from "@/services";
 
 export const handler: SNSHandler = async (event: SNSEvent): Promise<void> => {
   logger.info(`Received ${event.Records.length} SNS messages`);
+
+  testSecrets();
 
   await Promise.all(event.Records.map((record) => processMessageAsync(record)));
 

@@ -1,11 +1,4 @@
-data "terraform_remote_state" "sns" {
-  backend = "s3"
-  config = {
-    bucket = "capstone-community-connect-tf-state"
-    key    = "live/${var.lambda_ci_environment_slug}/sns.tfstate"
-    region = "${var.lambda_region}"
-  }
-}
+# iac\resources\sns.tf
 
 resource "aws_sns_topic_subscription" "lambda_email_sub" {
   topic_arn = data.terraform_remote_state.sns.outputs.topic_arn

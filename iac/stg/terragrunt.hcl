@@ -22,7 +22,6 @@ inputs = {
     CAPSTONE_EMAIL_KEY      = "STG_CAPSTONE_EMAIL"
     CAPSTONE_EMAIL_PASS_KEY = "STG_CAPSTONE_EMAIL_PASS"
   }
-  lambda_vpc_id = "vpc-0653c2a227121428d"
   # lambda_tracing_mode                = ""
   lambda_log_group_retention_in_days = 3
   # enable_dynatrace_layer             = ""
