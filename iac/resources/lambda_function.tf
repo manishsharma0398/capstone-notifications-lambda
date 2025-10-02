@@ -13,6 +13,15 @@ resource "aws_security_group" "main" {
   description = "Security Group for lamdba function ${local.full_lambda_name}"
   vpc_id      = data.terraform_remote_state.vpcs.outputs.vpc_id
 
+  # Allow outbound HTTPS to VPC endpoint
+  egress {
+    description = "HTTPS to VPC endpoints"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [data.terraform_remote_state.vpcs.outputs.vpc_cidr_block]
+  }
+
   egress {
     description = "Egress Traffic"
     from_port   = 0
