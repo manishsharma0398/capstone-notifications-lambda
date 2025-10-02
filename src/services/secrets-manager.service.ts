@@ -10,7 +10,9 @@ import { logger } from "@/utils";
 export class SecretService {
   private static instance: SecretService;
 
-  private client = new SecretsManagerClient({ region: "ap-south-2" }); // reused
+  private client = new SecretsManagerClient({
+    region: "ap-south-2",
+  });
 
   private capstoneEmail: string = "";
   private capstoneEmailPass: string = "";
@@ -54,24 +56,25 @@ export class SecretService {
 
     logger.debug(`[SecretService] getSecretKey(secretId: ${secretId})`);
     try {
-      const command = new GetSecretValueCommand({ SecretId: secretId });
-      logger.debug(`[SecretService] Command created for: ${secretId}`);
-
-      const res = await this.client.send(command);
+      const response = await this.client.send(
+        new GetSecretValueCommand({
+          SecretId: secretId,
+        }),
+      );
 
       // Safe logging - only log what we need
       logger.debug(
         `[SecretService] Secret retrieved successfully for: ${secretId}`,
         {
-          name: res.Name,
-          arn: res.ARN,
-          createdDate: res.CreatedDate,
-          hasSecretString: !!res.SecretString,
-          secretStringLength: res.SecretString?.length,
+          name: response.Name,
+          arn: response.ARN,
+          createdDate: response.CreatedDate,
+          hasSecretString: !!response.SecretString,
+          secretStringLength: response.SecretString?.length,
         },
       );
 
-      if (res.SecretString) return res.SecretString;
+      if (response.SecretString) return response.SecretString;
 
       throw new Error(`[SecretService] SecretString ${secretId} not found`);
     } catch (err) {

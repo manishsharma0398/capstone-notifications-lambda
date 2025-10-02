@@ -9,7 +9,7 @@ locals {
 # Security group for Lambda
 # -------------------------------
 resource "aws_security_group" "main" {
-  name        = "${local.full_lambda_name}-sg"
+  name        = "${local.full_lambda_name}-lambda-sg"
   description = "Security Group for lamdba function ${local.full_lambda_name}"
   vpc_id      = data.terraform_remote_state.vpcs.outputs.vpc_id
 
@@ -22,20 +22,42 @@ resource "aws_security_group" "main" {
 
 resource "aws_security_group_rule" "lambda_egress_to_vpce" {
   type                     = "egress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
   security_group_id        = aws_security_group.main.id # Lambda SG
   source_security_group_id = data.terraform_remote_state.vpcs.outputs.secrets_manager_vpc_endpoint_sg_id
+  description              = "Allowing ${local.full_lambda_name} lambda to send traffic to secrets manager"
 }
 
 resource "aws_security_group_rule" "lambda_ingress_from_vpce" {
   type                     = "ingress"
-  from_port                = 443
-  to_port                  = 443
-  protocol                 = "tcp"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
   security_group_id        = aws_security_group.main.id # Lambda SG
   source_security_group_id = data.terraform_remote_state.vpcs.outputs.secrets_manager_vpc_endpoint_sg_id
+  description              = "Allowing ${local.full_lambda_name} lambda to receive traffic from secrets manager"
+}
+
+resource "aws_security_group_rule" "lambda_ingress_self" {
+  type                     = "ingress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.main.id # Lambda SG
+  source_security_group_id = aws_security_group.main.id # Lambda SG
+  description              = "Allowing ${local.full_lambda_name} lambda to receive traffic from itself"
+}
+
+resource "aws_security_group_rule" "lambda_egress_self" {
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 0
+  protocol                 = "-1"
+  security_group_id        = aws_security_group.main.id # Lambda SG
+  source_security_group_id = aws_security_group.main.id # Lambda SG
+  description              = "Allowing ${local.full_lambda_name} lambda to send traffic to itself"
 }
 
 # -------------------------------
