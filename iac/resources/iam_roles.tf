@@ -21,7 +21,6 @@ resource "aws_iam_role" "lambda_exec" {
 }
 
 resource "aws_iam_policy" "secrets_policy" {
-  path        = "/"
   name        = "${local.full_lambda_name}-secrets"
   description = "Policy for ${local.full_lambda_name} to read secrets from Secret Manager"
 
@@ -29,11 +28,13 @@ resource "aws_iam_policy" "secrets_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = [
-          "secretsmanager:GetSecretValue",
-          "secretsmanager:ListSecrets"
-        ]
+        Sid    = "Allows lambda to retrive secrets from Secret Manager."
         Effect = "Allow"
+        Action = [
+          "secretsmanager:ListSecrets",
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
         Resource = [
           aws_secretsmanager_secret.capstone_email_key.arn,
           aws_secretsmanager_secret.capstone_email_key_pass.arn,
