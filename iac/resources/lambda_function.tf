@@ -120,13 +120,6 @@ resource "aws_lambda_function" "main" {
   #   }
   # }
 
-  # dynamic "dead_letter_config" {
-  #   for_each = var.lambda_dead_letter_target_arn == null ? [] : [true]
-  #   content {
-  #     target_arn = var.lambda_dead_letter_target_arn
-  #   }
-  # }
-
   depends_on = [
     aws_cloudwatch_log_group.main
   ]
