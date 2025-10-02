@@ -16,7 +16,7 @@ terraform {
 inputs = {
   lambda_ci_environment_slug = "${local.env}"
   lambda_memory_size         = 256
-  lambda_timeout             = 3
+  lambda_timeout             = 7
   lambda_environment_variables = {
     LOG_LEVEL               = "DEBUG"
     CAPSTONE_EMAIL_KEY      = "STG_CAPSTONE_EMAIL"
