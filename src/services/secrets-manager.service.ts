@@ -28,7 +28,7 @@ export class SecretService {
   async getCapstoneEmail() {
     if (!this.capstoneEmail) {
       logger.debug("[SecretService] Fetching capstone email");
-      this.capstoneEmail = await this.getSecretKey(Env.CAPSTONE_EMAIL_KEY!);
+      this.capstoneEmail = await this.getSecretKey("STG_EMAIL_CAPSTONE");
       logger.debug("[SecretService] capstoneEmail cached");
     }
     return this.capstoneEmail;
@@ -38,7 +38,7 @@ export class SecretService {
     if (!this.capstoneEmailPass) {
       logger.debug("[SecretService] Fetching capstone email password");
       this.capstoneEmailPass = await this.getSecretKey(
-        Env.CAPSTONE_EMAIL_PASS_KEY!,
+        "STG_EMAIL_PASS_CAPSTONE",
       );
       logger.debug("[SecretService] capstoneEmailPass cached");
     }
