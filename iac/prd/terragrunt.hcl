@@ -18,9 +18,10 @@ inputs = {
   lambda_memory_size         = 256
   lambda_timeout             = 3
   lambda_environment_variables = {
-    LOG_LEVEL = "INFO"
+    LOG_LEVEL               = "INFO"
+    CAPSTONE_EMAIL_KEY      = "PRD_CAPSTONE_EMAIL"
+    CAPSTONE_EMAIL_PASS_KEY = "PRD_CAPSTONE_EMAIL_PASS"
   }
-  lambda_vpc_id = "vpc-0838bac41ccae0716"
   # lambda_tracing_mode                = ""
   lambda_log_group_retention_in_days = 7
   # enable_dynatrace_layer             = ""

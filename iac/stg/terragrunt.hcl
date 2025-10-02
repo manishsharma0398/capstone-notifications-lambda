@@ -16,11 +16,12 @@ terraform {
 inputs = {
   lambda_ci_environment_slug = "${local.env}"
   lambda_memory_size         = 256
-  lambda_timeout             = 3
+  lambda_timeout             = 7
   lambda_environment_variables = {
-    LOG_LEVEL = "DEBUG"
+    LOG_LEVEL               = "DEBUG"
+    CAPSTONE_EMAIL_KEY      = "STG_EMAIL_CAPSTONE"
+    CAPSTONE_EMAIL_PASS_KEY = "STG_EMAIL_PASS_CAPSTONE"
   }
-  lambda_vpc_id = "vpc-0653c2a227121428d"
   # lambda_tracing_mode                = ""
   lambda_log_group_retention_in_days = 3
   # enable_dynatrace_layer             = ""

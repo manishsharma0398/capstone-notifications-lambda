@@ -1,0 +1,4 @@
+export const Env = {
+  CAPSTONE_EMAIL_KEY: process.env.CAPSTONE_EMAIL_KEY,
+  CAPSTONE_EMAIL_PASS_KEY: process.env.CAPSTONE_EMAIL_PASS_KEY,
+};

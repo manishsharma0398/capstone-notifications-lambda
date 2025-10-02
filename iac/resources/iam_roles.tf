@@ -1,3 +1,5 @@
+# iac\resources\iam_roles.tf
+
 resource "aws_iam_role" "lambda_exec" {
   name = local.full_lambda_name
 
@@ -5,8 +7,9 @@ resource "aws_iam_role" "lambda_exec" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
+        Sid    = ""
         Effect = "Allow"
+        Action = "sts:AssumeRole"
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -19,6 +22,31 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
+resource "aws_iam_policy" "secrets_policy" {
+  name        = "${local.full_lambda_name}-secrets"
+  description = "Policy for ${local.full_lambda_name} to read secrets from Secret Manager"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowSecretsAccess"
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:ListSecrets"
+        ]
+        Resource = [
+          data.aws_secretsmanager_secret.capstone_email_key.arn,
+          data.aws_secretsmanager_secret.capstone_email_pass_key.arn,
+        ]
+      },
+    ]
+  })
+}
+
+
 resource "aws_iam_role_policy_attachment" "lambda_execution" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -27,4 +55,9 @@ resource "aws_iam_role_policy_attachment" "lambda_execution" {
 resource "aws_iam_role_policy_attachment" "vpc_access" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
+
+resource "aws_iam_role_policy_attachment" "secrets_access" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.secrets_policy.arn
 }

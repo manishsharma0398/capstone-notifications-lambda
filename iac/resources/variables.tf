@@ -43,10 +43,7 @@
 
 ####
 
-variable "lambda_vpc_id" {
-  description = "AWS VPC were to deploy the lambda function"
-  default     = null
-}
+# iac\resources\variables.tf
 
 variable "lambda_region" {
   description = "Default AWS region"

@@ -50,4 +50,4 @@ jobs:
           name: "Release v${{ env.VERSION }}"
           body: |
             ## Changes in this release
-            $(git log --pretty=format:"- %s (%h)" -n 20)
+            git log --pretty=format:"- %s (%h)" -n 20
