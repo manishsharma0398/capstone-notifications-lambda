@@ -28,7 +28,7 @@ resource "aws_iam_policy" "secrets_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "Allows lambda to retrive secrets from Secret Manager."
+        Sid    = "AllowSecretsAccess"
         Effect = "Allow"
         Action = [
           "secretsmanager:ListSecrets",
